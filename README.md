@@ -1,4 +1,4 @@
-# AHB FLASITER 
+# AHB FLASH WRITER 
 ## I/O Registers
 | Register | Offset | Mode         | Size | Description |
 | -------- | ------ | ------------ | ------|----- |
