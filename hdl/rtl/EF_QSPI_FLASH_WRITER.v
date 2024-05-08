@@ -31,7 +31,7 @@
         14: SI data in (read, 4bits)
 */
 
-module AHB_FLASH_WRITER_QSPI (
+module EF_QSPI_FLASH_WRITER (
     input               HCLK,
     input               HRESETn,
     

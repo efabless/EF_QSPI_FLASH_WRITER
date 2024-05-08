@@ -1,0 +1,139 @@
+---
+info:
+  name: EF_QSPI_FLASH_WRITER
+  description: A Quad SPI Flash Writer used to program flash. It can be used along
+    with flash controller to program the flash then read from it.
+  repo: github.com/efabless/EF_QSPI_FLASH_WRITER
+  owner: Efabless Corp.
+  license: Apache 2.0
+  author: Mohamed Shalan
+  email: mshalan@efabless.com
+  version: v1.0.0
+  date: 8-05-2024
+  category: digital
+  tags:
+    - memory
+    - flash
+    - qspi
+  bus:
+    - AHBL
+  type: soft
+  status: verified
+  cell_count:
+    - IP: N/A
+    - AHBL: TBD
+  width: "0.0"
+  height: "0.0"
+  technology: n/a
+  clock_freq_mhz:
+    - IP: N/A
+    - AHBL: TBD
+  digital_supply_voltage: n/a
+  analog_supply_voltage: n/a
+  irq_reg_offset: 65280
+  fifo_reg_offset: 65024
+external_interface:
+  - name: fr_sck
+    port: fr_sck
+    width: 1
+    direction: input
+    description: spi clock coming from flash reader
+  - name: fr_ce_n
+    port: fr_ce_n
+    width: 1
+    direction: input
+    description: spi slave select coming from flash reader
+  - name: fr_din
+    port: fr_din
+    width: 4
+    direction: output
+    description: spi master data in going to the flash reader
+  - name: fr_dout
+    port: fr_dout
+    width: 4
+    direction: input
+    description: spi master data out coming from flash reader
+  - name: fr_douten
+    port: fr_douten
+    width: 4
+    direction: input
+    description: spi master data out enable coming from flash reader
+  - name: fm_sck
+    port: fm_sck
+    width: 1
+    direction: output
+    description: spi clock going to flash (slave)
+  - name: fm_ce_n
+    port: fm_ce_n
+    width: 1
+    direction: output
+    description: spi slave select going to flash (slave)
+  - name: fm_din
+    port: fm_din
+    width: 4
+    direction: input
+    description: spi master data in coming from flash (slave)
+  - name: fm_dout
+    port: fm_dout
+    width: 4
+    direction: output
+    description: spi master data out going to flash (slave)
+  - name: fm_douten
+    port: fm_douten
+    width: 4
+    direction: output
+    description: spi master data out enable going to flash (slave)
+registers:
+  - name: WE
+    size: 1
+    mode: w
+    fifo: no
+    offset: 0
+    bit_access: no
+    write_port: ""
+    description: Write Enable; enables flash writer to write to flash
+  - name: SS
+    size: 1
+    mode: w
+    fifo: no
+    offset: 4
+    bit_access: no
+    write_port: ""
+    description: Slave Select; flash SS signal value
+  - name: SCK
+    size: 1
+    mode: w
+    fifo: no
+    offset: 8
+    bit_access: no
+    write_port: ""
+    description: Slave Clock; flash SCK signal value
+  - name: OE
+    size: 4
+    mode: w
+    fifo: no
+    offset: 12
+    bit_access: no
+    write_port: ""
+    description: Output enable for the four flash IOs
+  - name: DATAO
+    size: 4
+    mode: w
+    fifo: no
+    offset: 16
+    bit_access: no
+    write_port: ""
+    description: Output Data from the flash writer or controller going to flash
+  - name: DATAI
+    size: 4
+    mode: r
+    fifo: no
+    offset: 20
+    bit_access: no
+    write_port: ""
+    description: Input Data coming from flash flash
+clock:
+  name: HCLK
+reset:
+  name: HRESETn
+  level: 0
