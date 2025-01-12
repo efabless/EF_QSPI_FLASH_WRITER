@@ -6,8 +6,8 @@ info:
   repo: github.com/efabless/EF_QSPI_FLASH_WRITER
   owner: Efabless Corp.
   license: Apache 2.0
-  author: Mohamed Shalan
-  email: mshalan@efabless.com
+  author: Efabless Corp.
+  email: ip_admin@efabless.com
   version: v1.0.0
   date: 8-05-2024
   category: digital
@@ -134,6 +134,7 @@ registers:
     description: Input Data coming from flash flash
 clock:
   name: HCLK
+  gated: 'no'
 reset:
   name: HRESETn
   level: 0

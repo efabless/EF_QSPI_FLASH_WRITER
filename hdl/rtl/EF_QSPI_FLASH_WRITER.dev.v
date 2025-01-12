@@ -18,101 +18,7 @@
 `timescale              1ns/1ps
 `default_nettype        wire
 
-/*
-	Copyright 2020 Mohamed Shalan
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at:
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+`include                "ahbl_util.vh"
 
 /*
     A bit bangging flash writer with AHB slave interface
@@ -166,28 +72,7 @@ module EF_QSPI_FLASH_WRITER (
                 ID_REG_OFF  = 8'h18;
                 
                 
-    
-    reg             last_HSEL;
-    reg [31:0]      last_HADDR;
-    reg             last_HWRITE;
-    reg [1:0]       last_HTRANS;
-
-    always@ (posedge HCLK or negedge HRESETn) begin
-		if (!HRESETn) begin
-			last_HSEL       <= 0;
-			last_HADDR      <= 0;
-			last_HWRITE     <= 0;
-			last_HTRANS     <= 0;
-		end else if(HREADY) begin
-			last_HSEL       <= HSEL;
-			last_HADDR      <= HADDR;
-			last_HWRITE     <= HWRITE;
-			last_HTRANS     <= HTRANS;
-		end
-	end
-
-    wire rd_enable = last_HSEL & (~last_HWRITE) & last_HTRANS[1];
-    wire wr_enable = last_HSEL & (last_HWRITE) & last_HTRANS[1];
+    `AHB_SLAVE_EPILOGUE
 
     reg             WE_REG;
     wire WE_REG_sel = wr_enable & (last_HADDR[7:0] == WE_REG_OFF);
@@ -199,38 +84,10 @@ module EF_QSPI_FLASH_WRITER (
             WE_REG <= HWDATA[0];
     end
 
-    
-        reg [1-1:0] SS_REG;
-        wire SS_REG_SEL = wr_enable & (last_HADDR[15:0] == SS_REG_OFF);
-        always @(posedge HCLK or negedge HRESETn)
-            if (~HRESETn)
-                SS_REG <= 1;
-            else if (SS_REG_SEL)
-                SS_REG <= HWDATA[1-1:0];  
-    
-        reg [1-1:0] SCK_REG;
-        wire SCK_REG_SEL = wr_enable & (last_HADDR[15:0] == SCK_REG_OFF);
-        always @(posedge HCLK or negedge HRESETn)
-            if (~HRESETn)
-                SCK_REG <= 0;
-            else if (SCK_REG_SEL)
-                SCK_REG <= HWDATA[1-1:0];
-    
-        reg [4-1:0] OE_REG;
-        wire OE_REG_SEL = wr_enable & (last_HADDR[15:0] == OE_REG_OFF);
-        always @(posedge HCLK or negedge HRESETn)
-            if (~HRESETn)
-                OE_REG <= 0;
-            else if (OE_REG_SEL)
-                OE_REG <= HWDATA[4-1:0];  
-    
-        reg [4-1:0] SO_REG;
-        wire SO_REG_SEL = wr_enable & (last_HADDR[15:0] == SO_REG_OFF);
-        always @(posedge HCLK or negedge HRESETn)
-            if (~HRESETn)
-                SO_REG <= 0;
-            else if (SO_REG_SEL)
-                SO_REG <= HWDATA[4-1:0];
+    `_AHB_REG_(SS_REG, 1, SS_REG_OFF, 1, SS_REG_SEL)  
+    `_AHB_REG_(SCK_REG, 1, SCK_REG_OFF, 0, SCK_REG_SEL)
+    `_AHB_REG_(OE_REG, 4, OE_REG_OFF, 0, OE_REG_SEL)  
+    `_AHB_REG_(SO_REG, 4, SO_REG_OFF, 0, SO_REG_SEL)
     
     assign HRDATA = (last_HADDR[7:0] == SI_REG_OFF) & rd_enable ? {31'h0, fm_din[1]} : 
                     (last_HADDR[7:0] == ID_REG_OFF) & rd_enable ? {32'hABCD0001} : 
