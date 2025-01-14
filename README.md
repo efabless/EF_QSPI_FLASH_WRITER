@@ -10,7 +10,16 @@ A Quad SPI Flash Writer used to program flash. It can be used along with flash c
 
 ```verilog
 EF_QSPI_FLASH_WRITER_APB INST (
-	`TB_AHBL_SLAVE_CONN,
+	.HCLK(CLK), 
+	.HRESETn(RESETn), 
+	.HADDR(HADDR), 
+	.HWRITE(HWRITE), 
+	.HSEL(HSEL), 
+	.HTRANS(HTRANS), 
+	.HWDATA(HWDATA),
+	.HRDATA(HRDATA), 
+	.HREADY(HREADY),
+	.HREADYOUT(HREADYOUT),
 	.fr_sck(fr_sck)
 	.fr_ce_n(fr_ce_n)
 	.fr_din(fr_din)
@@ -23,9 +32,6 @@ EF_QSPI_FLASH_WRITER_APB INST (
 	.fm_douten(fm_douten)
 );
 ```
-> **_NOTE:_** `TB_APB_SLAVE_CONN is a convenient macro provided by [BusWrap](https://github.com/efabless/BusWrap/tree/main).
-#### Wrappers with DFT support
-Wrappers in the directory ``/hdl/rtl/bus_wrappers/DFT`` have an extra input port ``sc_testmode`` to disable the clock gate whenever the scan chain testmode is enabled.
 
 ## Implementation example  
 
@@ -78,14 +84,6 @@ Output Data from the flash writer or controller going to flash
 Input Data coming from flash flash
 <img src="https://svg.wavedrom.com/{reg:[{name:'DATAI', bits:4},{bits: 28}], config: {lanes: 2, hflip: true}} "/>
 
-### Clock Gating
-The IP includes a clock gating feature that allows selective activation and deactivation of the clock using the ``GCLK`` register. This capability is implemented through the ``ef_util_gating_cell`` module, which is part of the common modules library, [ef_util_lib.v](https://github.com/efabless/EF_IP_UTIL/blob/main/hdl/ef_util_lib.v). By default, the clock gating is disabled. To enable behavioral implmentation clock gating, only for simulation purposes, you should define the ``CLKG_GENERIC`` macro. Alternatively, define the ``CLKG_SKY130_HD`` macro if you wish to use the SKY130 HD library clock gating cell, ``sky130_fd_sc_hd__dlclkp_4``.
-
-**Note:** If you choose the [OpenLane2](https://github.com/efabless/openlane2) flow for implementation and would like to enable the clock gating feature, you need to add ``CLKG_SKY130_HD`` macro to the ``VERILOG_DEFINES`` configuration variable. Update OpenLane2 YAML configuration file as follows: 
-```
-VERILOG_DEFINES:
-- CLKG_SKY130_HD
-```
 
 ### The Interface 
 
