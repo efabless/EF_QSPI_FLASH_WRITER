@@ -8,8 +8,8 @@ info:
   license: Apache 2.0
   author: Efabless Corp.
   email: ip_admin@efabless.com
-  version: v1.0.0
-  date: 8-05-2024
+  version: v1.1.0
+  date: 2025-01-23
   category: digital
   tags:
     - memory
