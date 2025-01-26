@@ -53,7 +53,7 @@ module EF_QSPI_FLASH_WRITER (
     input  wire         fr_ce_n,
     output wire [3:0]   fr_din,
     input  wire [3:0]   fr_dout,
-    input  wire         fr_douten,
+    input  wire [3:0]   fr_douten,
 
     // FLASH Interface
     output  wire        fm_sck,
@@ -144,7 +144,7 @@ module EF_QSPI_FLASH_WRITER (
 
     assign  fm_sck      =   WE_REG  ?   SCK_REG :   fr_sck;
     assign  fm_ce_n     =   WE_REG  ?   SS_REG  :   fr_ce_n;
-    assign  fm_douten   =   WE_REG  ?   OE_REG  :   {4{fr_douten}};
+    assign  fm_douten   =   WE_REG  ?   OE_REG  :   fr_douten;
     assign  fm_dout     =   WE_REG  ?   SO_REG  :   fr_dout;
 
     assign fr_din       =   fm_din;
