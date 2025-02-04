@@ -132,6 +132,14 @@ registers:
     bit_access: no
     write_port: ""
     description: Input Data coming from flash flash
+  - name: ID
+    size: 32
+    mode: r
+    fifo: no
+    offset: 24
+    bit_access: no
+    write_port: ""
+    description: ID for the flash writer
 clock:
   name: HCLK
   gated: 'no'
