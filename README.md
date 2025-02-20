@@ -10,16 +10,7 @@ A Quad SPI Flash Writer used to program flash. It can be used along with flash c
 
 ```verilog
 EF_QSPI_FLASH_WRITER_APB INST (
-	.HCLK(CLK), 
-	.HRESETn(RESETn), 
-	.HADDR(HADDR), 
-	.HWRITE(HWRITE), 
-	.HSEL(HSEL), 
-	.HTRANS(HTRANS), 
-	.HWDATA(HWDATA),
-	.HRDATA(HRDATA), 
-	.HREADY(HREADY),
-	.HREADYOUT(HREADYOUT),
+	`TB_AHBL_SLAVE_CONN,
 	.fr_sck(fr_sck)
 	.fr_ce_n(fr_ce_n)
 	.fr_din(fr_din)
@@ -32,6 +23,9 @@ EF_QSPI_FLASH_WRITER_APB INST (
 	.fm_douten(fm_douten)
 );
 ```
+> **_NOTE:_** `TB_APB_SLAVE_CONN is a convenient macro provided by [BusWrap](https://github.com/efabless/BusWrap/tree/main).
+### Wrappers with DFT support
+Wrappers in the directory ``/hdl/rtl/bus_wrappers/DFT`` have an extra input port ``sc_testmode`` to disable the clock gate whenever the scan chain testmode is enabled.
 ### External IO interfaces
 |IO name|Direction|Width|Description|
 |---|---|---|---|
@@ -45,6 +39,8 @@ EF_QSPI_FLASH_WRITER_APB INST (
 |fm_din|input|4|spi master data in coming from flash (slave)|
 |fm_dout|output|4|spi master data out going to flash (slave)|
 |fm_douten|output|4|spi master data out enable going to flash (slave)|
+### Interrupt Request Line (irq)
+This IP generates interrupts on specific events, which are described in the [Interrupt Flags](#interrupt-flags) section bellow. The IRQ port should be connected to the system interrupt controller.
 
 ## Implementation example  
 
@@ -66,6 +62,7 @@ The following table is the result for implementing the EF_QSPI_FLASH_WRITER IP w
 |OE|000c|0x00000000|w|Output enable for the four flash IOs|
 |DATAO|0010|0x00000000|w|Output Data from the flash writer or controller going to flash|
 |DATAI|0014|0x00000000|r|Input Data coming from flash flash|
+|ID|0018|0x00000000|r|ID for the flash writer|
 
 ### WE Register [Offset: 0x0, mode: w]
 
@@ -97,10 +94,14 @@ Output Data from the flash writer or controller going to flash
 Input Data coming from flash flash
 <img src="https://svg.wavedrom.com/{reg:[{name:'DATAI', bits:4},{bits: 28}], config: {lanes: 2, hflip: true}} "/>
 
+### ID Register [Offset: 0x18, mode: r]
+
+ID for the flash writer
+<img src="https://svg.wavedrom.com/{reg:[{name:'ID', bits:32},{bits: 0}], config: {lanes: 2, hflip: true}} "/>
 
 ## Firmware Drivers:
-Firmware drivers for EF_QSPI_FLASH_WRITER can be found in the [Drivers](https://github.com/efabless/EFIS/tree/main/Drivers) directory in the [EFIS](https://github.com/efabless/EFIS) (Efabless Firmware Interface Standard) repo. EF_QSPI_FLASH_WRITER driver documentation  is available [here](https://github.com/efabless/EFIS/blob/main/Drivers/docs/EF_Driver_QSPI_FLASH_WRITER/README.md).
-You can also find an example C application using the EF_QSPI_FLASH_WRITER drivers [here](https://github.com/efabless/EFIS/tree/main/Drivers/docs/EF_Driver_QSPI_FLASH_WRITER/example).
+Firmware drivers for EF_QSPI_FLASH_WRITER can be found in the [Drivers](https://github.com/efabless/EFIS/tree/main/Drivers) directory in the [EFIS](https://github.com/efabless/EFIS) (Efabless Firmware Interface Standard) repo. EF_QSPI_FLASH_WRITER driver documentation  is available [here](https://github.com/efabless/EFIS/blob/main/Drivers/Docs/EF_QSPI_FLASH_WRITER/README.md).
+You can also find an example C application using the EF_QSPI_FLASH_WRITER drivers [here](https://github.com/efabless/EFIS/tree/main/Drivers/Docs/EF_QSPI_FLASH_WRITER/example).
 ## Installation:
 You can install the IP either by cloning this repository or by using [IPM](https://github.com/efabless/IPM).
 ### 1. Using [IPM](https://github.com/efabless/IPM):
